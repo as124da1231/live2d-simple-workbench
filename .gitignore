@@ -1,0 +1,8 @@
+.workbench/
+build/
+dist/
+workbench.config.json
+node_modules/
+*.log
+*.zip
+workbench.config.json.*

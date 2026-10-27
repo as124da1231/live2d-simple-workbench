@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>simple preview</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="/preview.css">
+</head>
+<body>
+<div id="viewport">
+  <div id="stage" data-layer="desktop">
+    <div id="root"></div>
+    <svg id="overlay" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
+    <div id="hud" class="hud"></div>
+  </div>
+</div>
+<div id="boot" class="boot"><span>加载模型…</span></div>
+<script type="module" src="/preview.js"></script>
+</body>
+</html>

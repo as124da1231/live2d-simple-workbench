@@ -1,0 +1,73 @@
+:root {
+  --ink: #1b1a1e;
+  --muted: #5c5c60;
+  --dim: #8b8b8f;
+  --accent: #00a870;
+  --warn: #96743b;
+  --danger: #b45950;
+  --line: rgba(27, 26, 30, .12);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: #eef0ef; overflow: hidden; }
+#viewport { position: absolute; inset: 0; overflow: hidden; background: #eef0ef; }
+#stage {
+  position: absolute; left: 50%; top: 50%;
+  transform-origin: center center;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(27,26,30,.10), 0 18px 50px rgba(27,26,30,.16);
+  overflow: hidden;
+}
+#stage[data-layer="body"] {
+  background-color: #fbfbfb;
+  background-image:
+    linear-gradient(45deg, #ecece9 25%, transparent 25%, transparent 75%, #ecece9 75%),
+    linear-gradient(45deg, #ecece9 25%, transparent 25%, transparent 75%, #ecece9 75%);
+  background-size: 24px 24px;
+  background-position: 0 0, 12px 12px;
+}
+#root { position: absolute; inset: 0; }
+#overlay { position: absolute; inset: 0; overflow: visible; pointer-events: none; }
+
+/* 辅助线：白底上的深色线，body / desktop 共用 */
+.guide { fill: none; stroke: rgba(27,26,30,.20); stroke-width: 2; }
+.guide.dim { stroke: rgba(27,26,30,.10); }
+.guide.dark { stroke: rgba(27,26,30,.32); }
+.guide.accent { stroke: rgba(0,168,112,.72); stroke-dasharray: 10 8; }
+.guide.warn { stroke: var(--warn); }
+.guide.danger { stroke: var(--danger); }
+.band { fill: rgba(0,168,112,.055); stroke: none; }
+.band.held { fill: rgba(150,116,59,.10); }
+.taskbar { fill: rgba(27,26,30,.055); }
+.hit { fill: rgba(0,168,112,.10); stroke: rgba(0,168,112,.52); stroke-width: 2; }
+.hit.miss { stroke: rgba(180,89,80,.75); fill: rgba(180,89,80,.08); }
+.label {
+  font: 20px/1.2 ui-monospace, Consolas, monospace;
+  fill: var(--muted); paint-order: stroke;
+  stroke: rgba(255,255,255,.72); stroke-width: 3px;
+}
+.label.dark { fill: var(--muted); stroke: rgba(255,255,255,.72); }
+.label.accent { fill: #007a52; }
+.label.warn { fill: var(--warn); }
+.label.danger { fill: var(--danger); }
+.marker { fill: var(--accent); }
+.marker.home { fill: rgba(27,26,30,.35); }
+.marker.saved { fill: var(--warn); }
+.dot { fill: var(--accent); }
+.dot.tear { fill: #4a9fdd; }
+.dot.heart { fill: #e2557c; }
+.dot.z { fill: #9b8650; }
+
+#hud {
+  position: absolute; left: 12px; bottom: 10px; z-index: 4;
+  font: 11px/1.4 ui-monospace, Consolas, monospace;
+  color: var(--muted); background: rgba(255,255,255,.86);
+  border: 1px solid rgba(27,26,30,.10); border-radius: 6px;
+  padding: 3px 8px; pointer-events: none; white-space: nowrap;
+}
+.boot {
+  position: absolute; inset: 0; z-index: 6; display: grid; place-items: center;
+  background: #fff; color: var(--muted);
+  font: 13px/1.6 ui-monospace, Consolas, monospace;
+}
+.boot[hidden] { display: none; }
+.boot.bad { color: var(--danger); }

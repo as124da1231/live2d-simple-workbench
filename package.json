@@ -1,0 +1,30 @@
+{
+  "name": "live2d-simple-workbench",
+  "version": "1.9.2",
+  "private": true,
+  "description": "Live2D 简易工作台：导入模型 → 构建底脸形象包 → 安装到 Coopanion",
+  "author": "as124da1231",
+  "license": "AGPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/as124da1231/live2d-simple-workbench.git"
+  },
+  "homepage": "https://github.com/as124da1231/live2d-simple-workbench",
+  "bugs": {
+    "url": "https://github.com/as124da1231/live2d-simple-workbench/issues"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node tools/workbench/server.mjs --port 4700 --open",
+    "check": "node --check tools/convert.mjs && node --check tools/workbench/server.mjs && node --check tools/workbench/ui.js && node --check tools/workbench/preview.js && node --check pack/backends/live2d.js"
+  },
+  "keywords": [
+    "live2d",
+    "coopanion",
+    "desktop-pet",
+    "cortico"
+  ]
+}
