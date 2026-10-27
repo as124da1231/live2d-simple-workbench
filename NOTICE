@@ -1,0 +1,70 @@
+Live2D 简易工作台 / Live2D Simple Workbench
+Copyright (C) 2026 as124da1231
+
+这个发布包整体按 GNU Affero General Public License v3.0 or later（AGPL-3.0-or-later）发布。
+完整许可证见同目录 LICENSE。源码随包提供（tools/、pack/、vendor/），没有隐藏的服务端逻辑。
+
+This distribution is licensed under the GNU Affero General Public License, version 3
+or (at your option) any later version. See LICENSE for the full text.
+
+--------------------------------------------------------------------------------
+第三方组件 / Third-party components
+
+1. Coopanion desktop-pet kit
+   文件：vendor/coo-kit/kit/body.js、vendor/coo-kit/kit/rig.js
+   来源：Coopanion / cortico-world-desktop-pet
+   https://github.com/Pal-AI-Lab/Coopanion
+   许可证：AGPL-3.0-or-later
+   Copyright (C) Pal AI Lab
+   说明：本工作台的预览和构建都依赖这套 kit；因此本发布包整体采用 AGPL。
+   如果去掉这套 kit，预览将无法在“没装 Coo”的机器上运行。
+
+2. SoulLink Emotion Engine
+   文件：pack/vendor/soullink/
+   上游：https://github.com/nanlingyin/soullink-emotion-sdk
+   版本：0.2.0-beta.1
+   许可证：Apache-2.0（完整文本见 pack/vendor/soullink/LICENSE）
+   Copyright 2026 Soullink Emotion contributors
+   说明：按原样引入的构建产物，负责 VAD / FACS / 待机微动 / 眨眼 / 呼吸。
+
+3. Live2D Cubism SDK for Web
+   文件：pack/sdk/framework.js、pack/sdk/shaders.js
+   许可证：Live2D Open Software License
+   完整文本：pack/sdk/LICENSE-live2d-components.txt
+   https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html
+   Copyright (C) Live2D Inc.
+
+4. Live2D Cubism Core
+   文件：pack/sdk/live2dcubismcore.min.js
+   许可证：Live2D Proprietary Software License
+   完整文本：pack/sdk/LICENSE-live2d-core.txt
+   https://www.live2d.com/eula/live2d-proprietary-software-license-agreement_en.html
+   Copyright (C) Live2D Inc.
+
+   这个文件的头部自带声明："This file corresponds to the Redistributable Code in
+   the agreement." 即它属于该许可第 5 条定义的 Redistributable Code，允许随衍生
+   作品一起原样分发。本包未对该文件做任何修改。
+
+   按该许可第 5.2.2 条，最终用户须同意等效的保护条款。因此：
+   - 许可原文随包提供，见 pack/sdk/LICENSE-live2d-core.txt；
+   - 首次打开工作台会显示一次许可提示；
+   - 继续使用、构建或分发本包，即表示同意 Live2D Inc. 的上述许可。
+
+   Live2D 的 SDK / Core 不是 AGPL 代码，也不会因为本项目的 AGPL 声明而改变许可。
+   它们独立存放在 pack/sdk/，各自带有许可文本，不与本项目的 AGPL 部分混同。
+   如果你不接受 Live2D 的许可，请删除 pack/sdk/ 下的对应文件，并自行从 live2d.com
+   获取你拥有授权的 Cubism 运行时。
+
+5. 模型 / 贴图 / 表情素材
+   本发布包不包含任何 Live2D 模型、moc3、贴图或表情文件。
+   用户通过工作台导入的模型仍归原作者所有；构建和安装前请确认自己有权使用和分发。
+   本工具不会替用户授予模型素材的许可。
+
+--------------------------------------------------------------------------------
+没有包含的东西
+
+- .workbench/（构建产物、截图、取景记忆）
+- workbench.config.json（本机 Coo 路径）
+- 任何用户模型、贴图、安装后的形象包
+
+如果你重新分发本工具，请保留 LICENSE、NOTICE 和第三方许可证文件。

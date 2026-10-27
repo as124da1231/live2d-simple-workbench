@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live2D 简易工作台</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='9' y='7' width='42' height='42' rx='12' fill='%23eef0ef' stroke='%231b1a1e' stroke-width='2.6' opacity='.5'/%3E%3Crect x='17' y='15' width='40' height='40' rx='11' fill='%23fbfbfb' stroke='%231b1a1e' stroke-width='3.2'/%3E%3Cpath d='M31 30v5M43 30v5' stroke='%231b1a1e' stroke-width='3.8' stroke-linecap='round'/%3E%3Cpath d='M30 41c3 4 10 4 13 0' fill='none' stroke='%2300a870' stroke-width='3.8' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/ui.css">
+</head>
+<body>
+<div class="licenseBar" id="licenseBar" hidden>
+  <span class="licenseText">
+    本工具随包附带 Live2D Cubism 运行时，按 Live2D Inc. 的许可原样分发。继续使用即表示同意该许可。
+    <a href="/license/core.txt" target="_blank" rel="noopener">Core 许可</a>
+    <a href="/license/components.txt" target="_blank" rel="noopener">SDK 许可</a>
+  </span>
+  <button id="licenseOk" class="ghost tiny">知道了</button>
+</div>
+<header class="topbar">
+  <div class="brand">
+    <svg class="mark" viewBox="0 0 64 64" aria-hidden="true">
+      <rect x="9" y="7" width="42" height="42" rx="12" fill="#eef0ef" stroke="#1b1a1e" stroke-width="2.6" opacity=".5"/>
+      <rect x="17" y="15" width="40" height="40" rx="11" fill="#fbfbfb" stroke="#1b1a1e" stroke-width="3.2"/>
+      <path d="M31 30v5M43 30v5" stroke="#1b1a1e" stroke-width="3.8" stroke-linecap="round"/>
+      <path d="M30 41c3 4 10 4 13 0" fill="none" stroke="#00a870" stroke-width="3.8" stroke-linecap="round"/>
+    </svg>
+    <h1>Live2D 简易工作台</h1>
+    <span class="tag">simple</span>
+  </div>
+  <div class="modelbar">
+    <input id="modelDir" placeholder="模型目录（包含 .model3.json）" spellcheck="false">
+    <button id="pickDir" class="ghost">选择…</button>
+    <button id="build" class="primary">构建</button>
+    <button id="install" disabled>安装</button>
+  </div>
+  <button id="cooBtn" class="ghost tiny cooBtn" title="选择 Coopanion 目录">Coo 未连接</button>
+  <div class="status" id="status">等待模型</div>
+</header>
+
+<main class="layout">
+  <aside class="col left">
+    <section class="card">
+      <div class="cardHead"><h2>模型</h2><span class="badge" id="modeBadge">简易</span><button id="identityBtn" class="ghost tiny" title="名字 / 一句话 / 作者 / 版本 / 封面"><img id="modelThumb" alt="" hidden>名片…</button></div>
+      <div class="modelName" id="modelName">—</div>
+      <div class="meta" id="modelMeta"></div>
+      <div class="chips" id="roles"></div>
+      <p class="note" id="coverageNote"></p>
+    </section>
+
+    <section class="card">
+      <div class="cardHead"><h2>表情</h2><span class="hint">底脸 · 无绑定</span><button id="neutralWord" class="ghost tiny" title="回到中性表情">平静</button></div>
+      <div class="words" id="words"></div>
+    </section>
+  </aside>
+
+  <section class="col center">
+    <div class="previewbar">
+      <div class="seg" id="layers" role="tablist">
+        <button data-layer="desktop" role="tab">桌面层</button>
+        <button data-layer="body" class="on" role="tab">身体层</button>
+      </div>
+      <div class="tools">
+        <label class="motionPick" title="只影响预览：站定 / 安静 / 自由">
+          <span>运动</span>
+          <select id="motionMode">
+            <option value="off">站定</option>
+            <option value="calm">安静</option>
+            <option value="free">自由</option>
+          </select>
+        </label>
+        <span class="viewLabel" id="viewLabel">视图 100%</span>
+        <button id="fitView" class="ghost">适应</button>
+        <button id="view100" class="ghost">100%</button>
+        <button id="resetPos" class="ghost">回到 0.7W</button>
+      </div>
+    </div>
+
+    <div class="stagewrap" id="stagewrap">
+      <iframe id="preview" title="preview" src="about:blank"></iframe>
+      <div class="empty" id="empty">
+        <strong>选择模型目录，然后点构建</strong>
+        <span>构建完会自动出预览，再点安装写进 Coo。</span>
+      </div>
+    </div>
+
+    <div class="fitbar" id="fitbar" hidden>
+      <label class="switch" title="自动把可见身体放进 256 盒：脚 256 / 中心 128 / 高约 232；拖动或滑杆会切到手动">
+        <input id="autoFit" type="checkbox" checked>
+        <span class="track"><span class="thumb"></span></span>
+        <span class="switchLabel">自动贴合</span>
+        <span class="switchState" id="autoFitState">自动</span>
+      </label>
+      <div class="slider">
+        <label for="fitZoom">取景缩放</label>
+        <input id="fitZoom" type="range" min="0.5" max="3.5" step="0.01" value="1">
+        <output id="fitZoomOut">1.00</output>
+      </div>
+      <div class="slider">
+        <label for="fitX">横向</label>
+        <input id="fitX" type="range" min="-0.6" max="0.6" step="0.005" value="0">
+        <output id="fitXOut">0.00</output>
+      </div>
+      <div class="slider">
+        <label for="fitY">纵向</label>
+        <input id="fitY" type="range" min="-0.6" max="0.6" step="0.005" value="0">
+        <output id="fitYOut">0.00</output>
+      </div>
+      <button id="fitReset" class="ghost">重置取景</button>
+      <span class="hint">拖模型或滑杆 = 手动</span>
+    </div>
+  </section>
+
+  <aside class="col right">
+    <section class="card">
+      <div class="cardHead"><h2>契约读数</h2><span class="hint" id="layerLabel">桌面层</span></div>
+      <div class="metrics" id="metrics">
+        <div class="metric"><span>抓取偏移</span><b id="mGrab">—</b><small>光标在头顶上方</small></div>
+        <div class="metric"><span>脚底离地</span><b id="mFeet">—</b><small>相对地板</small></div>
+        <div class="metric"><span>中心偏移</span><b id="mCenter">—</b><small>相对 128</small></div>
+        <div class="metric"><span>头顶可抓</span><b id="mHead">—</b><small>命中圈覆盖</small></div>
+      </div>
+      <div class="facts" id="facts"></div>
+    </section>
+
+    <section class="card">
+      <div class="cardHead"><h2>校验</h2><span class="badge" id="checkBadge">—</span></div>
+      <div class="checks" id="checks"><p class="note">扫描后显示。</p></div>
+    </section>
+
+    <section class="card grow">
+      <div class="cardHead"><h2>日志</h2><button id="clearLog" class="ghost tiny">清空</button></div>
+      <pre class="log" id="log"></pre>
+    </section>
+  </aside>
+</main>
+
+<div class="modal" id="identityModal" hidden>
+  <div class="modalCard" role="dialog" aria-modal="true" aria-labelledby="identityTitle">
+    <div class="cardHead">
+      <h2 id="identityTitle">设置 / 名片</h2>
+      <button id="identityClose" class="ghost tiny">关闭</button>
+    </div>
+    <div class="cooSetup">
+      <div class="cooSetupHead">
+        <span id="cooState" class="cooState">Coo 未连接</span>
+        <button id="pickCoo" class="ghost tiny">选择 Coo 目录…</button>
+      </div>
+      <div id="cooPath" class="cooPath">选择 Coopanion 安装目录，或它的 data/home/companion。只构建 / 预览时可以稍后再选。</div>
+    </div>
+    <div class="idGrid">
+      <div class="coverBox">
+        <img id="coverPreview" alt="" hidden>
+        <button id="coverRetake" class="ghost tiny">重拍封面</button>
+        <span id="coverState" class="hint">构建后自动生成</span>
+      </div>
+      <div class="idFields">
+        <label class="field">名字 <input id="idNameZh" maxlength="40" autocomplete="off"></label>
+        <label class="field">English <input id="idNameEn" maxlength="40" autocomplete="off"></label>
+        <label class="field">一句话 <textarea id="idAboutZh" rows="2" maxlength="240"></textarea></label>
+        <label class="field">English <textarea id="idAboutEn" rows="2" maxlength="240"></textarea></label>
+        <div class="idRow">
+          <label class="field">作者 <input id="idAuthor" maxlength="40" autocomplete="off"></label>
+          <label class="field">版本 <input id="idVersion" maxlength="24" placeholder="1.0.0"></label>
+        </div>
+        <label class="field">鸣谢 <input id="idCredit" maxlength="80" autocomplete="off" placeholder="模型 / 画师 / 朋友，可留空"></label>
+        <div class="idMotion">
+          <span>运动</span>
+          <label><input type="radio" name="motionKind" value="roam" checked> 灵动（跟随 Coo）</label>
+          <label><input type="radio" name="motionKind" value="stand"> 站定</label>
+        </div>
+        <div class="tuneRow" title="只放大待机 / 呼吸 / 微动 / 说话时的身体动作；走跑的姿态由 kit 自己控制，不受这里影响">
+          <span>身体幅度</span>
+          <input id="bodyGain" type="range" min="0.5" max="3" step="0.05" value="1.8">
+          <output id="bodyGainOut">1.80</output>
+        </div>
+        <div class="tuneRow" title="整体动作风格：手势频率、眨眼、呼吸节奏、微动强度">
+          <span>动作风格</span>
+          <select id="motionStyle">
+            <option value="natural">自然 natural</option>
+            <option value="lively">活泼 lively</option>
+            <option value="calm">安静 calm</option>
+            <option value="shy">害羞 shy</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="idActions">
+      <span class="hint" id="idHint">保存后需要重新构建</span>
+      <button id="identityCancel" class="ghost">取消</button>
+      <button id="identitySave" class="primary">保存</button>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="/ui.js"></script>
+</body>
+</html>

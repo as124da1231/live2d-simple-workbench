@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Live2D 简易工作台">
+  <title>Live2D 简易工作台</title>
+  <!-- 两个叠起来的纸面方块：桌面层 / 身体层 -->
+  <rect x="9" y="7" width="42" height="42" rx="12" fill="#eef0ef" stroke="#1b1a1e" stroke-width="2.6" opacity=".5"/>
+  <!-- 前面的方块：256 body box -->
+  <rect x="17" y="15" width="40" height="40" rx="11" fill="#fbfbfb" stroke="#1b1a1e" stroke-width="3.2"/>
+  <!-- 底脸：眼睛 + SoulLink 绿微笑 -->
+  <path d="M31 30v5M43 30v5" stroke="#1b1a1e" stroke-width="3.8" stroke-linecap="round"/>
+  <path d="M30 41c3 4 10 4 13 0" fill="none" stroke="#00a870" stroke-width="3.8" stroke-linecap="round"/>
+</svg>
